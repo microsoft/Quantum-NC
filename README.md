@@ -1,14 +1,17 @@
+# Microsoft Quantum Non-Commercial Repository
+
+This repository includes open-source materials
+that can be used for research and academics, but that should
+not be used for commercial purposes. For more information
+please refer to the [LICENSE](LICENSE).
+
+If you'd like more general information about Microsoft's quantum computing initiative, 
+see [Microsoft Quantum](https://www.microsoft.com/quantum/).
+
 
 # Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
+Please notice this project does not accept external contributions.
 
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+If you like to contribute some material, please consider https://github.com/microsoft/quantum.
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
