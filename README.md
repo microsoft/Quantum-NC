@@ -1,4 +1,4 @@
-# Microsoft Quantum Non-Commercial Repository
+'d# Microsoft Quantum Non-Commercial Repository
 
 This repository includes open-source materials
 that can be used for research and academics, but that should
@@ -13,5 +13,5 @@ see [Microsoft Quantum](https://www.microsoft.com/quantum/).
 
 Please note: this project does not accept external contributions.
 
-If you like to contribute material, please visit https://github.com/microsoft/quantum.
+If you'd like to contribute material, please visit https://github.com/microsoft/quantum.
 
