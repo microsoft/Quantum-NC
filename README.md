@@ -1,4 +1,4 @@
-'d# Microsoft Quantum Non-Commercial Repository
+# Microsoft Quantum Non-Commercial Repository
 
 This repository includes open-source materials
 that can be used for research and academics, but that should
