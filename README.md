@@ -11,7 +11,7 @@ see [Microsoft Quantum](https://www.microsoft.com/quantum/).
 
 # Contributing
 
-Please notice this project does not accept external contributions.
+Please note: this project does not accept external contributions.
 
-If you like to contribute some material, please consider https://github.com/microsoft/quantum.
+If you like to contribute material, please visit https://github.com/microsoft/quantum.
 
