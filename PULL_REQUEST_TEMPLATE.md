@@ -1,4 +1,3 @@
+Please note: this project does not accept external contributions.
 
-Please be advised that this repository does not accept any external contributions.
-
-If you'd like to contribute please consider https://github.com/microsoft/quantum.
+If you'd like to contribute material, please visit https://github.com/microsoft/quantum.
