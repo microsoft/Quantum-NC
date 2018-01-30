@@ -5,9 +5,26 @@
     "tasks": [
         {
             "label": "build",
-            "command": "dotnet build",
-            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build"
+            ],
+            "type": "process",
             "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+
+        {
+            "label": "test",
+            "command": "dotnet",
+            "args": [
+                "test"
+            ],
+            "type": "process",
+            "group": "test",
             "presentation": {
                 "reveal": "silent"
             },
