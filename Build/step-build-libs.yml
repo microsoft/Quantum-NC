@@ -1,0 +1,39 @@
+##
+# Builds, tests & package all libraries.
+##
+
+steps:
+##
+# Restore
+##
+- task: DotNetCoreCLI@2
+  displayName: 'Libraries dotnet restore'
+  inputs:
+    command: restore
+    projects: |
+      $(LibrariesRootFolder)\Quantum-NC.sln
+    vstsFeed: 'c314fd12-7618-4537-9207-18efb052f048'
+
+
+##
+# Build
+##
+- task: DotNetCoreCLI@2
+  displayName: 'Build Libraries'
+  inputs:
+    projects: |
+      $(LibrariesRootFolder)\Quantum-NC.sln
+    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+
+
+##
+# Test
+##
+- task: DotNetCoreCLI@2
+  displayName: 'Test Libraries'
+  inputs:
+    command: test
+    projects: |
+     $(LibrariesRootFolder)\Tests
+    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+
