@@ -11,14 +11,18 @@
     <FileVersion>0.2.1802.2202-preview</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RandomWalkPhaseEstimation\RandomWalkPhaseEstimation.csproj" />
+    <Content Include="xunit.runner.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.2.1802.2202-preview" />
-    <PackageReference Include="Microsoft.Quantum.Canon" Version="0.2.1802.2202-preview" />
-    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.2.1802.2202-preview" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <ProjectReference Include="..\src\Research.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.3.1810.2508-preview" />
+    <PackageReference Include="Microsoft.Quantum.Canon" Version="0.3.1810.2508-preview" />
+    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.3.1810.2508-preview" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
 </Project>

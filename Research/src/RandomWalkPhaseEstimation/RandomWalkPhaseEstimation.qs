@@ -1,13 +1,15 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the 
-// Microsoft Software License Terms for Microsoft Quantum Development Kit Libraries 
+// Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the
+// Microsoft Software License Terms for Microsoft Quantum Development Kit Libraries
 // and Samples. See LICENSE in the project root for license information.
-
-namespace Microsoft.Research.Quantum.RandomWalkPhaseEstimation {
+namespace Microsoft.Quantum.Research.RandomWalkPhaseEstimation {
+    
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Extensions.Math;
-	open Microsoft.Quantum.Canon;
-
+    open Microsoft.Quantum.Canon;
+    
+    
     // NB: we take std.dev instead of variance here to avoid having to take a square root.
+    
     /// # Summary
     /// Performs iterative phase estimation using a random walk to approximate
     /// Bayesian inference on the classical measurement results from a given
@@ -73,89 +75,92 @@ namespace Microsoft.Research.Quantum.RandomWalkPhaseEstimation {
     /// - Wiebe *et al.* 2013 [doi:10/tf3](https://doi.org/10.1103/PhysRevLett.112.190501),
     ///   [arXiv:1309.0876](https://arxiv.org/abs/1309.0876)
     /// - Wiebe and Granade 2018 *(in preparation)*.
-    operation RandomWalkPhaseEstimation(
-            initialMean : Double, initialStdDev : Double, nMeasurements : Int, maxMeasurements : Int, unwind : Int,
-            oracle : ContinuousOracle, targetState : Qubit[]
-        )  : Double
-    {
-        body {
-            let PREFACTOR = 0.79506009762065011;
-            let INV_SQRT_E = 0.60653065971263342;
-
-            let inner = ContinuousPhaseEstimationIteration(oracle, _, _, targetState, _);
-            let sampleOp = PrepAndMeasurePhaseEstImpl(_, _, inner);
-
-            mutable dataRecord = StackNew(nMeasurements);
-
-            mutable mu = initialMean;
-            mutable sigma = initialStdDev;
-            mutable datum = Zero;
-            mutable nTotalMeasurements = 0;
-            mutable nAcceptedMeasurements = 0;
-
-            repeat {
-                if (nTotalMeasurements >= maxMeasurements) {
-                    return mu;
-                }
-
-                let wInv = mu - PI() * sigma / 2.0;
-                let t = 1.0 / sigma;
-
-                set datum = sampleOp(wInv, t);
+    operation RandomWalkPhaseEstimation (initialMean : Double, initialStdDev : Double, nMeasurements : Int, maxMeasurements : Int, unwind : Int, oracle : ContinuousOracle, targetState : Qubit[]) : Double {
+        
+        let PREFACTOR = 0.79506009762065011;
+        let INV_SQRT_E = 0.60653065971263342;
+        let inner = ContinuousPhaseEstimationIteration(oracle, _, _, targetState, _);
+        let sampleOp = PrepAndMeasurePhaseEstImpl(_, _, inner);
+        mutable dataRecord = StackNew(nMeasurements);
+        mutable mu = initialMean;
+        mutable sigma = initialStdDev;
+        mutable datum = Zero;
+        mutable nTotalMeasurements = 0;
+        mutable nAcceptedMeasurements = 0;
+        
+        repeat {
+            
+            if (nTotalMeasurements >= maxMeasurements) {
+                return mu;
+            }
+            
+            let wInv = mu - (PI() * sigma) / 2.0;
+            let t = 1.0 / sigma;
+            set datum = sampleOp(wInv, t);
+            set nTotalMeasurements = nTotalMeasurements + 1;
+            
+            if (datum == Zero) {
+                set mu = mu - sigma * INV_SQRT_E;
+            }
+            else {
+                set mu = mu + sigma * INV_SQRT_E;
+            }
+            
+            set sigma = sigma * PREFACTOR;
+            set dataRecord = StackPush(dataRecord, datum);
+            
+            // Perform consistency check.
+            if (nTotalMeasurements >= maxMeasurements) {
+                return mu;
+            }
+            
+            if (unwind > 0) {
+                mutable checkDatum = sampleOp(mu, 1.0 / sigma);
                 set nTotalMeasurements = nTotalMeasurements + 1;
-
-                if (datum == Zero) {
-                    set mu = mu - sigma * INV_SQRT_E;
-                } else {
-                    set mu = mu + sigma * INV_SQRT_E;
-                }
-                set sigma = sigma * PREFACTOR;
-
-                set dataRecord = StackPush(dataRecord, datum);
-
-                // Perform consistency check.
-                if (nTotalMeasurements >= maxMeasurements) {
-                    return mu;
-                }
-                if (unwind > 0) {
-                    mutable checkDatum = sampleOp(mu, 1.0 / sigma);
-                    set nTotalMeasurements = nTotalMeasurements + 1;
-
-                    if (checkDatum == One) {
-                        repeat {
-                            for (idxUnwind in 0..(unwind - 1)) {
-
-                                set sigma = sigma / PREFACTOR;
-
-                                if (StackLength(dataRecord) > 0) {
-                                    let unwoundDatum = StackPeek(dataRecord);
-                                    set dataRecord = StackPop(dataRecord);
-
-                                    if (unwoundDatum == Zero) {
-                                        set mu = mu + sigma * INV_SQRT_E;
-                                    } else {
-                                        set mu = mu - sigma * INV_SQRT_E;
-                                    }
+                
+                if (checkDatum == One) {
+                    
+                    repeat {
+                        
+                        for (idxUnwind in 0 .. unwind - 1) {
+                            set sigma = sigma / PREFACTOR;
+                            
+                            if (StackLength(dataRecord) > 0) {
+                                let unwoundDatum = StackPeek(dataRecord);
+                                set dataRecord = StackPop(dataRecord);
+                                
+                                if (unwoundDatum == Zero) {
+                                    set mu = mu + sigma * INV_SQRT_E;
+                                }
+                                else {
+                                    set mu = mu - sigma * INV_SQRT_E;
                                 }
                             }
-
-                            if (nTotalMeasurements >= maxMeasurements) {
-                                Message("RWPE used too many measurements during unwinding.");
-                                return mu;
-                            }
-                            set checkDatum = sampleOp(mu, 1.0 / sigma);
-                            set nTotalMeasurements = nTotalMeasurements + 1;
-
-                        } until (checkDatum == Zero) fixup {
                         }
+                        
+                        if (nTotalMeasurements >= maxMeasurements) {
+                            Message("RWPE used too many measurements during unwinding.");
+                            return mu;
+                        }
+                        
+                        set checkDatum = sampleOp(mu, 1.0 / sigma);
+                        set nTotalMeasurements = nTotalMeasurements + 1;
+                    }
+                    until (checkDatum == Zero)
+                    fixup {
                     }
                 }
-
-                set nAcceptedMeasurements = nAcceptedMeasurements + 1;
-            } until (nAcceptedMeasurements >= nMeasurements) fixup {}
-
-            return mu;
+            }
+            
+            set nAcceptedMeasurements = nAcceptedMeasurements + 1;
         }
+        until (nAcceptedMeasurements >= nMeasurements)
+        fixup {
+        }
+        
+        return mu;
     }
-
+    
 }
+
+

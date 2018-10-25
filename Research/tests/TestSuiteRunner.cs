@@ -7,7 +7,7 @@ using Microsoft.Quantum.Simulation.Simulators;
 using Xunit.Abstractions;
 using System.Diagnostics;
 
-namespace Microsoft.Research.Quantum.Tests
+namespace Microsoft.Quantum.Research.Tests
 {
     public class TestSuiteRunner
     {
@@ -20,7 +20,7 @@ namespace Microsoft.Research.Quantum.Tests
 
         /// <summary>
         /// This driver will run all Q# tests (operations named "...Test") 
-        /// that belong to the namespace Microsoft.Research.Quantum.Tests.
+        /// that belong to the namespace Microsoft.Quantum.Research.Tests.
         /// </summary>
         [OperationDriver]
         public void TestTarget(TestOperation op)

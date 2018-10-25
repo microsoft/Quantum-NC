@@ -6,7 +6,7 @@ using System;
 using Microsoft.Quantum.Simulation.Core;
 using Microsoft.Quantum.Simulation.Simulators;
 
-namespace Microsoft.Research.Quantum.RandomWalkPhaseEstimation
+namespace Microsoft.Quantum.Research.RandomWalkPhaseEstimation
 {
     class Driver
     {
