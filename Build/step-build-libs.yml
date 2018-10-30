@@ -4,25 +4,13 @@
 
 steps:
 ##
-# Restore
-##
-- task: DotNetCoreCLI@2
-  displayName: 'Libraries dotnet restore'
-  inputs:
-    command: restore
-    projects: |
-      $(LibrariesRootFolder)\Quantum-NC.sln
-    vstsFeed: 'c314fd12-7618-4537-9207-18efb052f048'
-
-
-##
 # Build
 ##
 - task: DotNetCoreCLI@2
-  displayName: 'Build Libraries'
+  displayName: 'Build Libraries-NC'
   inputs:
     projects: |
-      $(LibrariesRootFolder)\Quantum-NC.sln
+      $(LibrariesNCRootFolder)\Quantum-NC.sln
     arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
 
 
@@ -30,10 +18,24 @@ steps:
 # Test
 ##
 - task: DotNetCoreCLI@2
-  displayName: 'Test Libraries'
+  displayName: 'Test Libraries-NC'
   inputs:
     command: test
     projects: |
-     $(LibrariesRootFolder)\Tests
+     $(LibrariesNCRootFolder)\Research\tests
     arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+
+
+##
+# Create Nuget.
+##
+- task: DotNetCoreCLI@2
+  displayName: 'Pack Libraries-NC'
+  inputs:
+    command: custom
+    custom: pack
+    projects: $(LibrariesNCRootFolder)\Research\src\Research.csproj
+    arguments: ' --no-build -c $(BuildConfiguration) -v n -o $(System.DefaultWorkingDirectory) /p:PackageVersion=$(Nuget.Version)'
+
+
 
