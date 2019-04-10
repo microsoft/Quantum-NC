@@ -2,44 +2,41 @@
 // Microsoft Software License Terms for Microsoft Quantum Development Kit Libraries
 // and Samples. See LICENSE in the project root for license information.
 namespace SystemTestJWOptimizedES {
-    
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Research.Chemistry;
-    
-    
+    open Microsoft.Quantum.Measurement;
+
     // Test phase of PP term.
     operation PPTermFromGeneralHamiltonianTestOp (identity : Double, data : JWOptimizedHTerms) : Unit {
-        
+
         let time = 1.0;
-        
-        using (qubits = Qubit[3]) {
+
+        using ((qubits, parityQubit) = (Qubit[3], Qubit())) {
             
-            using (parityQubit = Qubit[1]) {
-                
-                // Create |00> + |10>
-                let qubitSys = qubits[0 .. Length(qubits) - 2];
-                H(qubits[0]);
-                JWOptimizedApplyTrotterStep(data, time, time, parityQubit[0], qubitSys);
-                AssertPhase(-0.5 * time, qubits[0], 1E-10);
-                ResetAll(qubits);
-                
-                // Create |00> + |01>
-                H(qubits[1]);
-                JWOptimizedApplyTrotterStep(data, time, time, parityQubit[0], qubitSys);
-                AssertPhase(-0.0 * time, qubits[1], 1E-10);
-                ResetAll(qubits);
-                let ctrl = qubits[Length(qubits) - 1];
-                H(ctrl);
-                X(qubitSys[0]);
-                (Controlled (Exp([PauliI], time * identity, _)))([ctrl], [qubits[0]]);
-                (Controlled (JWOptimizedApplyTrotterStep(data, time, time, parityQubit[0], _)))([ctrl], qubitSys);
-                AssertPhase(-0.5 * time, ctrl, 1E-10);
-                ResetAll(qubits + parityQubit);
-            }
+            // Create |00> + |10>
+            let qubitSys = qubits[0 .. Length(qubits) - 2];
+            H(qubits[0]);
+            JWOptimizedApplyTrotterStep(data, time, time, parityQubit, qubitSys);
+            AssertPhase(-0.5 * time, qubits[0], 1E-10);
+            ResetAll(qubits);
+
+            // Create |00> + |01>
+            H(qubits[1]);
+            JWOptimizedApplyTrotterStep(data, time, time, parityQubit, qubitSys);
+            AssertPhase(-0.0 * time, qubits[1], 1E-10);
+            ResetAll(qubits);
+            let ctrl = qubits[Length(qubits) - 1];
+            H(ctrl);
+            X(qubitSys[0]);
+            (Controlled (Exp([PauliI], time * identity, _)))([ctrl], [qubits[0]]);
+            (Controlled (JWOptimizedApplyTrotterStep(data, time, time, parityQubit, _)))([ctrl], qubitSys);
+            AssertPhase(-0.5 * time, ctrl, 1E-10);
+            ResetAll(qubits + [parityQubit]);
         }
     }
     
