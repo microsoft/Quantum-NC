@@ -7,12 +7,14 @@
 // M. B. Hastings, D. Wecker, B. Bauer, M. Troyer
 // https://arxiv.org/abs/1403.1539
 namespace Microsoft.Quantum.Research.Chemistry {
-    
+    open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Primitive;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Extensions.Math;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Chemistry.JordanWigner;
+    open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Math;
     
     
     // This evolution set runs off data optimized for a jordan-wigner encoding.

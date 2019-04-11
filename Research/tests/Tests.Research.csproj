@@ -4,22 +4,25 @@
     <PlatformTarget>x64</PlatformTarget>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
   <PropertyGroup>
     <Company>Microsoft</Company>
-    <Version>0.2.1802.2202-preview</Version>
-    <AssemblyVersion>0.2.1802.2202</AssemblyVersion>
-    <FileVersion>0.2.1802.2202-preview</FileVersion>
+    <Description>Tests for Microsoft's Quantum Research Libraries.</Description>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
   </PropertyGroup>
+
   <ItemGroup>
     <Content Include="xunit.runner.json" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\src\Research.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1903.2703" />
-    <PackageReference Include="Microsoft.Quantum.Canon" Version="0.5.1903.2703" />
-    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.5.1903.2703" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.6.1904.1008-beta" />
+    <PackageReference Include="Microsoft.Quantum.Standard" Version="0.6.1904.1008-beta" />
+    <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.6.1904.1008-beta" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
