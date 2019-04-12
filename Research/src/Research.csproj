@@ -19,10 +19,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.5.1903.2902" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\QuantumLibraries\Canon\src\Canon.csproj" />
-    <ProjectReference Include="..\..\..\QuantumLibraries\Chemistry\src\Runtime\Runtime.csproj" />
+    <PackageReference Include="Microsoft.Quantum.Canon" Version="0.5.1903.2902" />
   </ItemGroup>
 </Project>
