@@ -84,19 +84,19 @@ namespace Microsoft.Quantum.Research.Chemistry {
         for (idxGroup in 0 .. Length(prevFermionicTerm) / 2 - 1) {
             
             for (idxQubit in (prevFermionicTerm[idxGroup * 2] + 1) - minInt .. (prevFermionicTerm[idxGroup * 2 + 1] - 1) - minInt) {
-                set prevBitString[idxQubit] = true;
+                set prevBitString w/= idxQubit <- true;
             }
         }
         
         for (idxGroup in 0 .. Length(nextFermionicTerm) / 2 - 1) {
             
             for (idxQubit in (nextFermionicTerm[idxGroup * 2] + 1) - minInt .. (nextFermionicTerm[idxGroup * 2 + 1] - 1) - minInt) {
-                set nextBitString[idxQubit] = true;
+                set nextBitString w/= idxQubit <- true;
             }
         }
         
         for (idx in 0 .. nInts - 1) {
-            set nextBitString[idx] = XOR(prevBitString[idx], nextBitString[idx]);
+            set nextBitString w/= idx <- XOR(prevBitString[idx], nextBitString[idx]);
         }
         
         return (minInt, nextBitString);
