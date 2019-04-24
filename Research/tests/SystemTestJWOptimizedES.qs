@@ -3,10 +3,10 @@
 // and Samples. See LICENSE in the project root for license information.
 namespace SystemTestJWOptimizedES {
     open Microsoft.Quantum.Simulation;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Chemistry;
-    open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Research.Chemistry;
     open Microsoft.Quantum.Measurement;

@@ -8,13 +8,12 @@
 // https://arxiv.org/abs/1403.1539
 namespace Microsoft.Quantum.Research.Chemistry {
     open Microsoft.Quantum.Simulation;
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
-    open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Arrays;
-    open Microsoft.Quantum.Math;
     
     
     // This evolution set runs off data optimized for a jordan-wigner encoding.
@@ -142,7 +141,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     }
     
     
-    operation _ApplyBasisChange_ (ops : (Qubit => Unit : Adjoint, Controlled)[], qubits : Qubit[], targetQubit : Qubit) : Unit {
+    operation _ApplyBasisChange_ (ops : (Qubit => Unit is Adj + Ctl)[], qubits : Qubit[], targetQubit : Qubit) : Unit {
         
         body (...) {
             let allQubits = qubits + [targetQubit];
@@ -170,15 +169,8 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Qubit acted on by Rz.
-    operation _JWOptimizedZ_ (angle : Double, parityQubit : Qubit, qubit : Qubit) : Unit {
-        
-        body (...) {
-            WithCA(CNOT(parityQubit, _), Rz(-2.0 * angle, _), qubit);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _JWOptimizedZ_(angle : Double, parityQubit : Qubit, qubit : Qubit) : Unit is Adj + Ctl {
+        ApplyWithCA(CNOT(parityQubit, _), Rz(-2.0 * angle, _), qubit);
     }
     
     
@@ -228,7 +220,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
             let angle = (1.0 * coeff[0]) * stepSize;
             let q1 = qubits[idxFermions[0]];
             let q2 = qubits[idxFermions[1]];
-            WithCA(CNOT(q1, _), _JWOptimizedZ_(angle, parityQubit, _), q2);
+            ApplyWithCA(CNOT(q1, _), _JWOptimizedZ_(angle, parityQubit, _), q2);
         }
         
         adjoint invert;
@@ -253,7 +245,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
         
         body (...) {
             let ((idxTermType, coeff), idxFermions) = term!;
-            WithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimizedHpqTerm__(term, stepSize, parityQubit, _), qubits);
+            ApplyWithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimizedHpqTerm__(term, stepSize, parityQubit, _), qubits);
         }
         
         adjoint invert;
@@ -276,10 +268,10 @@ namespace Microsoft.Quantum.Research.Chemistry {
             let y = _Ybasis_(_);
             let ops = [[x, x], [y, y]];
             let op0 = _JWOptimizedZ_(angle, parityQubit, _);
-            let op1 = WithCA(CNOTChainTarget([qubitP], _), op0, _);
+            let op1 = ApplyWithCA(CNOTChainTarget([qubitP], _), op0, _);
             
             for (idxOp in 0 .. Length(ops) - 1) {
-                let op2 = WithCA(_ApplyBasisChange_(ops[idxOp], [qubitP], _), op1, _);
+                let op2 = ApplyWithCA(_ApplyBasisChange_(ops[idxOp], [qubitP], _), op1, _);
                 op2(qubitQ);
             }
         }
@@ -322,7 +314,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
             }
             else {
                 let termPR1 = GeneratorIndex((idxTermType, [1.0]), [idxFermions[0], idxFermions[3]]);
-                WithCA(CNOT(qubits[qubitQidx], _), _JWOptimizedHpqTerm_(termPR1, angle, _, qubits), parityQubit);
+                ApplyWithCA(CNOT(qubits[qubitQidx], _), _JWOptimizedHpqTerm_(termPR1, angle, _, qubits), parityQubit);
             }
         }
         
@@ -348,7 +340,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
         
         body (...) {
             let ((idxTermType, coeff), idxFermions) = term!;
-            WithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimized0123Term__(term, stepSize, parityQubit, _), qubits);
+            ApplyWithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimized0123Term__(term, stepSize, parityQubit, _), qubits);
         }
         
         adjoint invert;
@@ -377,8 +369,8 @@ namespace Microsoft.Quantum.Research.Chemistry {
                 
                 if (IsNotZero(v0123[idxOp % 4])) {
                     let op0 = _JWOptimizedZ_(angle * v0123[idxOp % 4], parityQubit, _);
-                    let op1 = WithCA(CNOTChainTarget(qubitsPQR, _), op0, _);
-                    let op2 = WithCA(_ApplyBasisChange_(ops[idxOp], qubitsPQR, _), op1, _);
+                    let op1 = ApplyWithCA(CNOTChainTarget(qubitsPQR, _), op0, _);
+                    let op2 = ApplyWithCA(_ApplyBasisChange_(ops[idxOp], qubitsPQR, _), op1, _);
                     op2(qubitS);
                 }
             }
@@ -529,7 +521,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// A tuple where: `Int` is the number of qubits allocated,
     /// `Double` is `1.0/trotterStepSize`, and the operation
     /// is the Trotter step.
-    function OptimizedTrotterStepOracle (qSharpData : JordanWignerEncodingData, trotterStepSize : Double, trotterOrder : Int) : (Int, (Double, (Qubit[] => Unit : Adjoint, Controlled))) {
+    function OptimizedTrotterStepOracle (qSharpData : JordanWignerEncodingData, trotterStepSize : Double, trotterOrder : Int) : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
         
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
         let oracle = _ApplyOptimizedTrotterStep_(qSharpData, trotterStepSize, _);
