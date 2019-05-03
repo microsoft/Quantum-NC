@@ -11,7 +11,12 @@ steps:
   inputs:
     projects: |
       $(LibrariesNCRootFolder)\Quantum-NC.sln
-    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+    arguments: >
+        -c $(BuildConfiguration)
+        -v n
+        /p:Version=$(Assembly.Version)
+        /p:QsharpDocsOutDir=$(DocsOutDir)
+
 
 
 ##
@@ -23,7 +28,11 @@ steps:
     command: test
     projects: |
      $(LibrariesNCRootFolder)\Research\tests
-    arguments: '-c $(BuildConfiguration) -v n /p:Version=$(Assembly.Version)'
+    arguments: >
+        -c $(BuildConfiguration)
+        -v n
+        /p:Version=$(Assembly.Version)
+        /p:QsharpDocsOutDir=$(DocsOutDir)
 
 
 ##
