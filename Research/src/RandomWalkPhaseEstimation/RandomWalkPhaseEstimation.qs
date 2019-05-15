@@ -2,10 +2,11 @@
 // Microsoft Software License Terms for Microsoft Quantum Development Kit Libraries
 // and Samples. See LICENSE in the project root for license information.
 namespace Microsoft.Quantum.Research.RandomWalkPhaseEstimation {
-    
-    open Microsoft.Quantum.Primitive;
-    open Microsoft.Quantum.Extensions.Math;
+    open Microsoft.Quantum.Intrinsic;
+    open Microsoft.Quantum.Math;
     open Microsoft.Quantum.Canon;
+    open Microsoft.Quantum.Oracles;
+    open Microsoft.Quantum.Characterization;
     
     
     // NB: we take std.dev instead of variance here to avoid having to take a square root.
@@ -76,7 +77,6 @@ namespace Microsoft.Quantum.Research.RandomWalkPhaseEstimation {
     ///   [arXiv:1309.0876](https://arxiv.org/abs/1309.0876)
     /// - Wiebe and Granade 2018 *(in preparation)*.
     operation RandomWalkPhaseEstimation (initialMean : Double, initialStdDev : Double, nMeasurements : Int, maxMeasurements : Int, unwind : Int, oracle : ContinuousOracle, targetState : Qubit[]) : Double {
-        
         let PREFACTOR = 0.79506009762065011;
         let INV_SQRT_E = 0.60653065971263342;
         let inner = ContinuousPhaseEstimationIteration(oracle, _, _, targetState, _);

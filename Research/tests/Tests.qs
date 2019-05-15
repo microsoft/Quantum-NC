@@ -2,8 +2,8 @@
 // Microsoft Software License Terms for Microsoft Quantum Development Kit Libraries
 // and Samples. See LICENSE in the project root for license information.
 namespace Microsoft.Quantum.Research.Tests {
-    
-    open Microsoft.Quantum.Primitive;
+    open Microsoft.Quantum.Diagnostics;
+    open Microsoft.Quantum.Intrinsic;
     open Microsoft.Quantum.Canon;
     open Microsoft.Quantum.Research.RandomWalkPhaseEstimation;
     
@@ -24,7 +24,7 @@ namespace Microsoft.Quantum.Research.Tests {
         let actual = PhaseEstimationSample(expected);
         
         // Give a very generous tolerance to reduce false positive rate.
-        AssertAlmostEqualTol(expected, actual, 0.05);
+        EqualityWithinToleranceFact(expected, actual, 0.05);
     }
     
 }
