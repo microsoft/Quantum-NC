@@ -16,14 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Chemistry\src\DataModel\DataModel.csproj" />
-    <ProjectReference Include="..\..\..\Chemistry\src\Runtime\Runtime.csproj" />
-    <ProjectReference Include="..\..\..\Standard\src\Standard.csproj" />
-    <ProjectReference Include="..\src\Research.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Microsoft.Quantum.Chemistry" Version="0.6.1905.301" />
     <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.6.1905.301" />
+    <PackageReference Include="Microsoft.Quantum.Standard" Version="0.6.1905.301" />
     <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.6.1905.301" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
