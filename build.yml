@@ -9,6 +9,8 @@ variables:
   Build.Major: 0
   Build.Minor: 0
   LibrariesNCRootFolder: $(System.DefaultWorkingDirectory)
+  Signed: ''
+  Assembly.Constants: $(Signed)
   Assembly.Version: $(Build.BuildNumber)
   Nuget.Version: $(Assembly.Version)-preview
 
