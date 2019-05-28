@@ -38,7 +38,7 @@ namespace Microsoft.Quantum.Research.RandomWalkPhaseEstimation {
     /// the expectation is over the posterior given all accepted data.
     ///
     /// # Remarks
-    /// <h3>Iterative Phase Estimation and Eigenstates</h3>
+    /// ### Iterative Phase Estimation and Eigenstates
     /// In general, the input register `eigenstate` need not be an
     /// eigenstate $\ket{\phi}$ of $U$, but can be a superposition over
     /// eigenstates. Suppose that the input state is given by
@@ -52,7 +52,7 @@ namespace Microsoft.Quantum.Research.RandomWalkPhaseEstimation {
     /// to a single eigenstate, as described in the
     /// [development guide](xref:microsoft.quantum.libraries.characterization#iterative-phase-estimation-without-eigenstates).
     ///
-    /// <h3>Experiment Design</h3>
+    /// ### Experiment Design
     /// The measurement times $t$ and inversion angles $\theta$
     /// passed to `oracle` are chosen according to
     /// the *particle guess heuristic*,
@@ -62,7 +62,7 @@ namespace Microsoft.Quantum.Research.RandomWalkPhaseEstimation {
     /// This heuristic is optimal for reducing the expected posterior variance
     /// in iterative phase estimation under the assumption of a normal prior.
     ///
-    /// <h3>Optimality</h3>
+    /// ### Optimality
     /// This operation approximates the optimal estimator for the phase
     /// $\phi$, as evaluated using the
     /// quadratic loss $L(\phi, \hat{\phi}) \mathrel{:=} (\phi - \hat{\phi})^2$.
