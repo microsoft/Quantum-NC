@@ -17,7 +17,6 @@ using Microsoft.Quantum.Chemistry.Broombridge;
 using Xunit;
 using Microsoft.Quantum.Chemistry.LadderOperators;
 using Microsoft.Quantum.Chemistry.Fermion;
-using Microsoft.Quantum.Chemistry.Pauli;
 using Microsoft.Quantum.Chemistry.QSharpFormat;
 using Microsoft.Quantum.Chemistry.JordanWigner;
 
