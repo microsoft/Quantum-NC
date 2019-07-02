@@ -18,7 +18,7 @@ steps:
     SearchPattern: '$(System.DefaultWorkingDirectory)/src/**/*.pdb'
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: qsharp-runtime'
+  displayName: 'Publish Artifact: quantum-nc'
   condition: succeededOrFailed()
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
