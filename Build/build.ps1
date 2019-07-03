@@ -12,6 +12,7 @@ function Build-One {
         [string]$project
     );
 
+    Write-Host "##[info]Building $project"
     dotnet $action (Join-Path $PSScriptRoot $project) `
         -c $Env:BUILD_CONFIGURATION `
         -v $Env:BUILD_VERBOSITY `
@@ -22,7 +23,6 @@ function Build-One {
     $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
 }
 
-Write-Host "##[info]Building Quantum-NC (Research) library"
 Build-One 'publish' '../Quantum-NC.sln'
 
 if (-not $all_ok) {
