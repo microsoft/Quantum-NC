@@ -18,8 +18,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Quantum.Chemistry" Version="0.9.1910.1302-alpha" />
-    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.9.1910.1107-alpha" />
-    <PackageReference Include="Microsoft.Quantum.Standard" Version="0.9.1910.1302-alpha" />
+    <PackageReference Include="Microsoft.Quantum.Chemistry" Version="0.10.1910.1701-alpha" />
+    <PackageReference Include="Microsoft.Quantum.Development.Kit" Version="0.10.1910.1603-alpha" />
+    <PackageReference Include="Microsoft.Quantum.Standard" Version="0.10.1910.1701-alpha" />
   </ItemGroup>
 </Project>
