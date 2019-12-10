@@ -2,7 +2,7 @@
 
 // Attributes for delay-signing
 #if SIGNED
-[assembly:AssemblyKeyFile("Properties\\267DevDivSNKey2048.snk")]
+[assembly:AssemblyKeyFile("..\\..\\Build\\267DevDivSNKey2048.snk")]
 [assembly:AssemblyDelaySign(true)]
 #endif
 
