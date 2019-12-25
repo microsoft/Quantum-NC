@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.Quantum.Sdk/0.10.1912.2505-alpha">
   
   <PropertyGroup>
+    <QscVerbosity>Detailed</QscVerbosity>    
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -23,7 +24,6 @@
     <PackageReference Include="Microsoft.Quantum.Chemistry" Version="0.10.1912.2303-alpha" />
     <PackageReference Include="Microsoft.Quantum.Xunit" Version="0.10.1912.2208-alpha" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
   </ItemGroup>
