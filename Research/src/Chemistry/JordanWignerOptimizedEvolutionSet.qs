@@ -41,25 +41,23 @@ namespace Microsoft.Quantum.Research.Chemistry {
     ///
     /// # Remarks
     /// This assumes that indices of P < Q < R < S < ... for both prevPQ and nextPQ.
-    operation ApplyDeltaParity (prevFermionicTerm : Int[], nextFermionicTerm : Int[], aux : Qubit, qubits : Qubit[]) : Unit {
+    operation ApplyDeltaParity(
+        prevFermionicTerm : Int[],
+        nextFermionicTerm : Int[],
+        aux : Qubit,
+        qubits : Qubit[]
+    )
+    : Unit is Adj + Ctl {
+        // Circuit with cancellation of neighbouring CNOTS
+        let (minInt, bitStingApplyCNOT) = _DeltaParityCNOTbitstring_(prevFermionicTerm, nextFermionicTerm);
         
-        body (...) {
-            // Circuit with cancellation of neighbouring CNOTS
-            let (minInt, bitStingApplyCNOT) = _DeltaParityCNOTbitstring_(prevFermionicTerm, nextFermionicTerm);
+        for (idx in 0 .. Length(bitStingApplyCNOT) - 1) {
             
-            for (idx in 0 .. Length(bitStingApplyCNOT) - 1) {
-                
-                if (bitStingApplyCNOT[idx] == true) {
-                    CNOT(qubits[idx + minInt], aux);
-                }
+            if (bitStingApplyCNOT[idx] == true) {
+                CNOT(qubits[idx + minInt], aux);
             }
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
-    
+    }    
     
     /// # Summary
     /// Classical processing step of `ApplyDeltaParity`.
@@ -109,16 +107,9 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// # Input
     /// ## qubit
     /// Qubit whose basis is to be changed.
-    operation _Ybasis_ (qubit : Qubit) : Unit {
-        
-        body (...) {
-            Adjoint S(qubit);
-            H(qubit);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _Ybasis(qubit : Qubit) : Unit is Adj + Ctl {
+        Adjoint S(qubit);
+        H(qubit);
     }
     
     
@@ -129,32 +120,20 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// # Input
     /// ## qubit
     /// Qubit whose basis is to be changed.
-    operation _Xbasis_ (qubit : Qubit) : Unit {
-        
-        body (...) {
-            H(qubit);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _Xbasis(qubit : Qubit) : Unit is Adj + Ctl {
+        H(qubit);
     }
     
     
-    operation _ApplyBasisChange_ (ops : (Qubit => Unit is Adj + Ctl)[], qubits : Qubit[], targetQubit : Qubit) : Unit {
-        
-        body (...) {
-            let allQubits = qubits + [targetQubit];
-            
-            for (idxOp in 0 .. Length(ops) - 1) {
-                let op = ops[idxOp];
-                ops[idxOp](allQubits[idxOp]);
-            }
+    operation _ApplyBasisChange(
+        ops : (Qubit => Unit is Adj + Ctl)[],
+        qubits : Qubit[],
+        targetQubit : Qubit
+    )
+    : Unit is Adj + Ctl {
+        for ((op, target) in Zip(ops, qubits + [targetQubit])) {
+            op(target);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
     
     
@@ -169,7 +148,8 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Qubit acted on by Rz.
-    operation _JWOptimizedZ_(angle : Double, parityQubit : Qubit, qubit : Qubit) : Unit is Adj + Ctl {
+    operation _JWOptimizedZ(angle : Double, parityQubit : Qubit, qubit : Qubit)
+    : Unit is Adj + Ctl {
         ApplyWithCA(CNOT(parityQubit, _), Rz(-2.0 * angle, _), qubit);
     }
     
@@ -186,18 +166,12 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _JWOptimizedZTerm_ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            let angle = (1.0 * coeff[0]) * stepSize;
-            let qubit = qubits[idxFermions[0]];
-            _JWOptimizedZ_(angle, parityQubit, qubit);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _JWOptimizedZTerm(term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        let angle = (1.0 * coeff[0]) * stepSize;
+        let qubit = qubits[idxFermions[0]];
+        _JWOptimizedZ(angle, parityQubit, qubit);
     }
     
     
@@ -213,21 +187,14 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _JWOptimizedZZTerm_ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            let angle = (1.0 * coeff[0]) * stepSize;
-            let q1 = qubits[idxFermions[0]];
-            let q2 = qubits[idxFermions[1]];
-            ApplyWithCA(CNOT(q1, _), _JWOptimizedZ_(angle, parityQubit, _), q2);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
-    
+    operation _JWOptimizedZZTerm(term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        let angle = (1.0 * coeff[0]) * stepSize;
+        let q1 = qubits[idxFermions[0]];
+        let q2 = qubits[idxFermions[1]];
+        ApplyWithCA(CNOT(q1, _), _JWOptimizedZ(angle, parityQubit, _), q2);
+    }    
     
     /// # Summary
     /// Applies time-evolution by a PQ term described by a `GeneratorIndex`.
@@ -241,44 +208,37 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _JWOptimizedHpqTerm_ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            ApplyWithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimizedHpqTerm__(term, stepSize, parityQubit, _), qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _JWOptimizedHpqTerm(term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        ApplyWithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimizedHpqTerm__(term, stepSize, parityQubit, _), qubits);
     }
     
     
     /// # Summary
     /// Implementation step of `JWOptimizedHpqTerm_`.
-    operation _JWOptimizedHpqTerm__ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
+    operation _JWOptimizedHpqTerm__ (
+        term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]
+    )
+    : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        let angle = (1.0 * coeff[0]) * stepSize;
+        let qubitP = qubits[idxFermions[0]];
+        let qubitQ = qubits[idxFermions[1]];
+        let qubitsPQ = Subarray(idxFermions[0 .. 1], qubits);
+        let x = _Xbasis;
+        let y = _Ybasis;
+        let ops = [[x, x], [y, y]];
+        let op0 = _JWOptimizedZ(angle, parityQubit, _);
+        let op1 = ApplyWithCA(CNOTChainTarget([qubitP], _), op0, _);
         
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            let angle = (1.0 * coeff[0]) * stepSize;
-            let qubitP = qubits[idxFermions[0]];
-            let qubitQ = qubits[idxFermions[1]];
-            let qubitsPQ = Subarray(idxFermions[0 .. 1], qubits);
-            let x = _Xbasis_(_);
-            let y = _Ybasis_(_);
-            let ops = [[x, x], [y, y]];
-            let op0 = _JWOptimizedZ_(angle, parityQubit, _);
-            let op1 = ApplyWithCA(CNOTChainTarget([qubitP], _), op0, _);
-            
-            for (idxOp in 0 .. Length(ops) - 1) {
-                let op2 = ApplyWithCA(_ApplyBasisChange_(ops[idxOp], [qubitP], _), op1, _);
-                op2(qubitQ);
-            }
+        for (idxOp in 0 .. Length(ops) - 1) {
+            ApplyWithCA(
+                _ApplyBasisChange(ops[idxOp], [qubitP], _),
+                op1,
+                qubitQ
+            );
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
     
     
@@ -294,33 +254,27 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _JWOptimizedPQandPQQRTerm_ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
+    operation _JWOptimizedPQandPQQRTerm(term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        let angle = (1.0 * coeff[0]) * stepSize;
+        let qubitQidx = idxFermions[1];
         
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            let angle = (1.0 * coeff[0]) * stepSize;
-            let qubitQidx = idxFermions[1];
-            
-            // For all cases, do the same thing:
-            // p < r < q (-1/2)(1+Z_q)(Z_{r-1,p+1})(X_p X_r + Y_p Y_r) (same as Hermitian conjugate of r < p < q)
-            // q < p < r (-1/2)(1+Z_q)(Z_{r-1,p+1})(X_p X_r + Y_p Y_r)
-            // p < q < r (-1/2)(1+Z_q)(Z_{r-1,p+1})(X_p X_r + Y_p Y_r)
-            
-            // This amounts to applying a PQ term, followed by same PQ term after a CNOT from q to the parity bit.
-            let termPR0 = GeneratorIndex((idxTermType, [1.0]), idxFermions);
-            
-            if (Length(idxFermions) == 2) {
-                _JWOptimizedHpqTerm_(termPR0, angle, parityQubit, qubits);
-            }
-            else {
-                let termPR1 = GeneratorIndex((idxTermType, [1.0]), [idxFermions[0], idxFermions[3]]);
-                ApplyWithCA(CNOT(qubits[qubitQidx], _), _JWOptimizedHpqTerm_(termPR1, angle, _, qubits), parityQubit);
-            }
+        // For all cases, do the same thing:
+        // p < r < q (-1/2)(1+Z_q)(Z_{r-1,p+1})(X_p X_r + Y_p Y_r) (same as Hermitian conjugate of r < p < q)
+        // q < p < r (-1/2)(1+Z_q)(Z_{r-1,p+1})(X_p X_r + Y_p Y_r)
+        // p < q < r (-1/2)(1+Z_q)(Z_{r-1,p+1})(X_p X_r + Y_p Y_r)
+        
+        // This amounts to applying a PQ term, followed by same PQ term after a CNOT from q to the parity bit.
+        let termPR0 = GeneratorIndex((idxTermType, [1.0]), idxFermions);
+        
+        if (Length(idxFermions) == 2) {
+            _JWOptimizedHpqTerm(termPR0, angle, parityQubit, qubits);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        else {
+            let termPR1 = GeneratorIndex((idxTermType, [1.0]), [idxFermions[0], idxFermions[3]]);
+            ApplyWithCA(CNOT(qubits[qubitQidx], _), _JWOptimizedHpqTerm(termPR1, angle, _, qubits), parityQubit);
+        }
     }
     
     
@@ -336,51 +290,50 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation _JWOptimized0123Term_ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            let ((idxTermType, coeff), idxFermions) = term!;
-            ApplyWithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimized0123Term__(term, stepSize, parityQubit, _), qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+    operation _JWOptimized0123Term(term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let ((idxTermType, coeff), idxFermions) = term!;
+        ApplyWithCA(
+            ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _),
+            _JWOptimized0123Term__(term, stepSize, parityQubit, _),
+            qubits
+        );
     }
     
     
     /// # Summary
     /// Implementation step of `JWOptimized0123Term_`;
-    operation _JWOptimized0123Term__ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
+    operation _JWOptimized0123Term__ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        let x = _Xbasis;
+        let y = _Ybasis;
+        let angle = stepSize;
         
-        body (...) {
-            let x = _Xbasis_(_);
-            let y = _Ybasis_(_);
-            let angle = stepSize;
-            
-            // v0 v1 v2 v3 v0 v1 v2 v3
-            let ops = [[x, x, x, x], [x, x, y, y], [x, y, x, y], [y, x, x, y], [y, y, y, y], [y, y, x, x], [y, x, y, x], [x, y, y, x]];
-            let ((idxTermType, v0123), idxFermions) = term!;
-            let qubitsPQRS = Subarray(idxFermions, qubits);
-            let qubitsPQR = qubitsPQRS[0 .. Length(qubitsPQRS) - 2];
-            let qubitS = qubitsPQRS[3];
-            
-            for (idxOp in 0 .. 7) {
-                
-                if (IsNotZero(v0123[idxOp % 4])) {
-                    let op0 = _JWOptimizedZ_(angle * v0123[idxOp % 4], parityQubit, _);
-                    let op1 = ApplyWithCA(CNOTChainTarget(qubitsPQR, _), op0, _);
-                    let op2 = ApplyWithCA(_ApplyBasisChange_(ops[idxOp], qubitsPQR, _), op1, _);
-                    op2(qubitS);
-                }
+        // v0 v1 v2 v3 v0 v1 v2 v3
+        let ops = [
+            [x, x, x, x],
+            [x, x, y, y],
+            [x, y, x, y],
+            [y, x, x, y],
+            [y, y, y, y],
+            [y, y, x, x],
+            [y, x, y, x],
+            [x, y, y, x]
+        ];
+        let ((idxTermType, v0123), idxFermions) = term!;
+        let qubitsPQRS = Subarray(idxFermions, qubits);
+        let qubitsPQR = qubitsPQRS[0 .. Length(qubitsPQRS) - 2];
+        let qubitS = qubitsPQRS[3];
+        
+        for (idxOp in 0 .. 7) {
+            if (IsNotZero(v0123[idxOp % 4])) {
+                let op0 = _JWOptimizedZ(angle * v0123[idxOp % 4], parityQubit, _);
+                let op1 = ApplyWithCA(CNOTChainTarget(qubitsPQR, _), op0, _);
+                let op2 = ApplyWithCA(_ApplyBasisChange(ops[idxOp], qubitsPQR, _), op1, _);
+                op2(qubitS);
             }
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
-    
+    }    
     
     /// # Summary
     /// Converts a Hamiltonian described by `JWOptimizedHTerms`
@@ -393,8 +346,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     ///
     /// # Output
     /// Representation of Hamiltonian as `GeneratorSystem`.
-    function JWOptimizedGeneratorSystem (data : JWOptimizedHTerms) : GeneratorSystem {
-        
+    function JWOptimizedGeneratorSystem(data : JWOptimizedHTerms) : GeneratorSystem {
         let (ZData, ZZData, PQandPQQRData, h0123Data) = data!;
         let ZGenSys = HTermsToGenSys(ZData, [0]);
         let ZZGenSys = HTermsToGenSys(ZZData, [1]);
@@ -413,17 +365,10 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Indices of qubits to be occupied by electrons.
     /// ## qubits
     /// Qubits of Hamiltonian.
-    operation JWOptimizedStatePreparation (qubitIndices : Int[], qubits : Qubit[]) : Unit {
-        
-        body (...) {
-            ApplyToEachCA(X, Subarray(qubitIndices, qubits));
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
-    }
-    
+    operation JWOptimizedStatePreparation (qubitIndices : Int[], qubits : Qubit[])
+    : Unit is Adj + Ctl {
+        ApplyToEachCA(X, Subarray(qubitIndices, qubits));
+    }    
     
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
@@ -443,31 +388,29 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Qubit that determines the sign of time-evolution.
     /// ## qubits
     /// Register acted upon by time-evolution operator.
-    operation JWOptimizedFermionEvolutionImpl (generatorIndex : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
+    operation _JWOptimizedFermionEvolution(
+        generatorIndex : GeneratorIndex,
+        stepSize : Double,
+        parityQubit : Qubit,
+        qubits : Qubit[]
+    )
+    : Unit is Adj + Ctl {
+        let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
+        let termType = idxTermType[0];
         
-        body (...) {
-            let ((idxTermType, idxDoubles), idxFermions) = generatorIndex!;
-            let termType = idxTermType[0];
-            
-            if (termType == 0) {
-                _JWOptimizedZTerm_(generatorIndex, stepSize, parityQubit, qubits);
-            }
-            elif (termType == 1) {
-                _JWOptimizedZZTerm_(generatorIndex, stepSize, parityQubit, qubits);
-            }
-            elif (termType == 2) {
-                _JWOptimizedPQandPQQRTerm_(generatorIndex, stepSize, parityQubit, qubits);
-            }
-            elif (termType == 3) {
-                _JWOptimized0123Term_(generatorIndex, stepSize, parityQubit, qubits);
-            }
+        if (termType == 0) {
+            _JWOptimizedZTerm(generatorIndex, stepSize, parityQubit, qubits);
         }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
+        elif (termType == 1) {
+            _JWOptimizedZZTerm(generatorIndex, stepSize, parityQubit, qubits);
+        }
+        elif (termType == 2) {
+            _JWOptimizedPQandPQQRTerm(generatorIndex, stepSize, parityQubit, qubits);
+        }
+        elif (termType == 3) {
+            _JWOptimized0123Term(generatorIndex, stepSize, parityQubit, qubits);
+        }
     }
-    
     
     /// # Summary
     /// Represents a dynamical generator as a set of simulatable gates and an
@@ -483,9 +426,9 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// # Output
     /// An `EvolutionUnitary` representing time-evolution by the term
     /// referenced in `generatorIndex.
-    function JWOptimizedFermionEvolutionFunction (generatorIndex : GeneratorIndex, parityQubit : Qubit) : EvolutionUnitary {
-        
-        return EvolutionUnitary(JWOptimizedFermionEvolutionImpl(generatorIndex, _, parityQubit, _));
+    function JWOptimizedFermionEvolutionFunction(generatorIndex : GeneratorIndex, parityQubit : Qubit)
+    : EvolutionUnitary {
+        return EvolutionUnitary(_JWOptimizedFermionEvolution(generatorIndex, _, parityQubit, _));
     }
     
     
@@ -500,8 +443,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// # Output
     /// An `EvolutionSet` that maps a `GeneratorIndex` for the JWOptimized basis to
     /// an `EvolutionUnitary.
-    function JordanWignerOptimizedFermionEvolutionSet (parityQubit : Qubit) : EvolutionSet {
-        
+    function JordanWignerOptimizedFermionEvolutionSet(parityQubit : Qubit) : EvolutionSet {
         return EvolutionSet(JWOptimizedFermionEvolutionFunction(_, parityQubit));
     }
     
@@ -521,10 +463,14 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// A tuple where: `Int` is the number of qubits allocated,
     /// `Double` is `1.0/trotterStepSize`, and the operation
     /// is the Trotter step.
-    function OptimizedTrotterStepOracle (qSharpData : JordanWignerEncodingData, trotterStepSize : Double, trotterOrder : Int) : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
-        
+    function OptimizedTrotterStepOracle(
+        qSharpData : JordanWignerEncodingData,
+        trotterStepSize : Double,
+        trotterOrder : Int
+    )
+    : (Int, (Double, (Qubit[] => Unit is Adj + Ctl))) {
         let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
-        let oracle = _ApplyOptimizedTrotterStep_(qSharpData, trotterStepSize, _);
+        let oracle = _ApplyOptimizedTrotterStep(qSharpData, trotterStepSize, _);
         let nTargetRegisterQubits = nSpinOrbitals + 1;
         let rescaleFactor = 0.5 / trotterStepSize;
         return (nTargetRegisterQubits, (rescaleFactor, oracle));
@@ -533,8 +479,8 @@ namespace Microsoft.Quantum.Research.Chemistry {
     
     /// This operation applies an optimized Trotter step for a Hamiltonian described by
     /// the `JordanWignerEncodingData` type.
-    operation _ApplyOptimizedTrotterStep_ (qSharpData : JordanWignerEncodingData, trotterStepSize : Double, allQubits : Qubit[]) : Unit {
-        
+    operation _ApplyOptimizedTrotterStep(qSharpData : JordanWignerEncodingData, trotterStepSize : Double, allQubits : Qubit[])
+    : Unit is Adj + Ctl {
         body (...) {
             let (nSpinOrbitals, data, statePrepData, energyShift) = qSharpData!;
             let parityQubit = allQubits[Length(allQubits) - 1];
@@ -546,20 +492,15 @@ namespace Microsoft.Quantum.Research.Chemistry {
             simulationAlgorithm!(trotterStepSize, evolutionGenerator, systemQubits);
         }
         
-        adjoint invert;
-        
         controlled (ctrlRegister, ...) {
             let parityQubit = allQubits[Length(allQubits) - 1];
-            X(parityQubit);
-            Controlled X(ctrlRegister, parityQubit);
-            _ApplyOptimizedTrotterStep_(qSharpData, trotterStepSize, allQubits);
-            Controlled X(ctrlRegister, parityQubit);
-            X(parityQubit);
+            within {
+                X(parityQubit);
+                Controlled X(ctrlRegister, parityQubit);
+            } apply {
+                _ApplyOptimizedTrotterStep(qSharpData, trotterStepSize, allQubits);
+            }
         }
-        
-        controlled adjoint invert;
     }
     
 }
-
-
