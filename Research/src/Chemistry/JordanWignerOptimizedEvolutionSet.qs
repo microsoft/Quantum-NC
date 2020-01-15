@@ -53,7 +53,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
         
         for (idx in 0 .. Length(bitStringApplyCNOT) - 1) {
             
-            if (bitStingApplyCNOT[idx] == true) {
+            if (bitStringApplyCNOT[idx] == true) {
                 CNOT(qubits[idx + minInt], aux);
             }
         }
