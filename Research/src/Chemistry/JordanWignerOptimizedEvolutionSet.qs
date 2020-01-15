@@ -49,7 +49,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     )
     : Unit is Adj + Ctl {
         // Circuit with cancellation of neighbouring CNOTS
-        let (minInt, bitStingApplyCNOT) = _DeltaParityCNOTbitstring_(prevFermionicTerm, nextFermionicTerm);
+        let (minInt, bitStringApplyCNOT) = _DeltaParityCNOTbitstring_(prevFermionicTerm, nextFermionicTerm);
         
         for (idx in 0 .. Length(bitStingApplyCNOT) - 1) {
             
