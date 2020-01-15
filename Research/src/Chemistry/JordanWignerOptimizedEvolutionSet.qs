@@ -51,7 +51,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
         // Circuit with cancellation of neighbouring CNOTS
         let (minInt, bitStringApplyCNOT) = _DeltaParityCNOTbitstring_(prevFermionicTerm, nextFermionicTerm);
         
-        for (idx in 0 .. Length(bitStingApplyCNOT) - 1) {
+        for (idx in 0 .. Length(bitStringApplyCNOT) - 1) {
             
             if (bitStingApplyCNOT[idx] == true) {
                 CNOT(qubits[idx + minInt], aux);
