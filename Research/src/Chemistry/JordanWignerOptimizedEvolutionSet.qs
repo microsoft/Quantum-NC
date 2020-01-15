@@ -49,11 +49,11 @@ namespace Microsoft.Quantum.Research.Chemistry {
     )
     : Unit is Adj + Ctl {
         // Circuit with cancellation of neighbouring CNOTS
-        let (minInt, bitStingApplyCNOT) = _DeltaParityCNOTbitstring(prevFermionicTerm, nextFermionicTerm);
+        let (minInt, bitStringApplyCNOT) = _DeltaParityCNOTbitstring(prevFermionicTerm, nextFermionicTerm);
 
-        for (idx in 0 .. Length(bitStingApplyCNOT) - 1) {
+        for (idx in 0 .. Length(bitStringApplyCNOT) - 1) {
 
-            if (bitStingApplyCNOT[idx] == true) {
+            if (bitStringApplyCNOT[idx] == true) {
                 CNOT(qubits[idx + minInt], aux);
             }
         }
@@ -228,7 +228,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
         let qubitsPQ = Subarray(idxFermions[0 .. 1], qubits);
         let x = _Xbasis;
         let y = _Ybasis;
-        let ops = [[x, x], [y, y]];
+        let ops = [[_Xbasis, _Xbasis], [_Ybasis, _Ybasis]];
         let op0 = _JWOptimizedZ(angle, parityQubit, _);
         let op1 = ApplyWithCA(CNOTChainTarget([qubitP], _), op0, _);
 
