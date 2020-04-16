@@ -13,4 +13,4 @@
         ".\src\characterization\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Characterization.dll",
         ".\src\chemistry\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Chemistry.dll"
     ) | ForEach-Object { Get-Item (Join-Path $PSScriptRoot ".." $_) };
-} | Write-Host;
+} | Write-Output;
