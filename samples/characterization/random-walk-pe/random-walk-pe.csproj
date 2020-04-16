@@ -14,7 +14,7 @@
 
                 <PackageReference Include="Microsoft.Quantum.Research" Version="0.11.2003.3107" />
     -->
-    <ProjectReference Include="../../../src/research/Research.csproj" />
+    <ProjectReference Include="../../../src/research/research.csproj" />
   </ItemGroup>
 
 </Project>
