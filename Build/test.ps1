@@ -20,7 +20,7 @@ function Test-One {
 }
 
 Write-Host "##[info]Testing Research/tests"
-Test-One '../Research/tests'
+Test-One '../src/tests'
 
 
 if (-not $all_ok) {
