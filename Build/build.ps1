@@ -4,7 +4,7 @@
 $ErrorActionPreference = 'Stop'
 
 & "$PSScriptRoot/set-env.ps1"
-$all_ok = $True
+$allOk = $True
 
 function Build-One {
     param(
@@ -20,11 +20,12 @@ function Build-One {
         /property:Version=$Env:ASSEMBLY_VERSION `
         /property:QsharpDocsOutputPath=$Env:DOCS_OUTDIR
 
-    $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
+    $script:allOk = ($LastExitCode -eq 0) -and $script:allOk
 }
 
 Build-One 'publish' '../Quantum-NC.sln'
+Build-One 'build' '../Samples.sln'
 
-if (-not $all_ok) {
+if (-not $allOk) {
     throw "At least one test failed execution. Check the logs."
 }
