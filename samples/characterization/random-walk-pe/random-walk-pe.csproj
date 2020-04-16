@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.Quantum.Sdk/0.11.2003.3107">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- NB: We use a ProjectReference to refer to the
+             Microsoft.Quantum.Research package from this sample, as that
+             package is built from this repository.
+             When writing your own code to use the Microsoft.Quantum.Research
+             package, we recommend using the following instead:
+
+                <PackageReference Include="Microsoft.Quantum.Research" Version="0.11.2003.3107" />
+    -->
+    <ProjectReference Include="../../../src/research/Research.csproj" />
+  </ItemGroup>
+
+</Project>

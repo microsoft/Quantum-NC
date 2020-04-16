@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.Net.Sdk">
+
+  <!--
+    This package is a metapackage, in that it contains no code in and of itself,
+    but depends on other packages for its content. We use
+    <IncludeBuildOutput>false</IncludeBuildOutput> to ensure that this package
+    is empty, and use that dotnet pack transforms project references into
+    package references to generate the correct dependencies in the generated
+    package.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Microsoft.Quantum.Research</AssemblyName>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Microsoft</Authors>
+    <Description>Quantum research libraries (non-commercial).</Description>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
+    <PackageLicenseUrl>https://github.com/Microsoft/Quantum-NC/raw/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Microsoft/Quantum-NC</PackageProjectUrl>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
+    <PackageTags>Quantum Q# Qsharp</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../chemistry/chemistry.csproj" />
+    <ProjectReference Include="../characterization/characterization.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -4,7 +4,7 @@
 $ErrorActionPreference = 'Stop'
 
 & "$PSScriptRoot/set-env.ps1"
-$all_ok = $True
+$allOk = $True
 
 function Pack-One() {
     Param($project)
@@ -16,13 +16,17 @@ function Pack-One() {
         -o $Env:NUGET_OUTDIR `
         /property:PackageVersion=$Env:NUGET_VERSION 
 
-    $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
+    $script:allOk = ($LastExitCode -eq 0) -and $script:allOk
 }
 
-Write-Host "##[info]Packing Research library..."
-Pack-One '../Research/src/Research.csproj'
+Write-Host "##[info]Packing Research libraries..."
+@(
+    '../src/chemistry/chemistry.csproj',
+    '../src/characterization/characterization.csproj',
+    '../src/research/research.csproj'
+) | ForEach-Object { Pack-One $_ }
 
 
-if (-not $all_ok) {
+if (-not $allOk) {
     throw "At least one test failed execution. Check the logs."
 }

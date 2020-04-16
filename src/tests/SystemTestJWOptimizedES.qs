@@ -514,19 +514,13 @@ namespace SystemTestJWOptimizedES {
     }
     
     
-    operation JWOptimizedApplyTrotterStep (data : JWOptimizedHTerms, time : Double, trotterStepSize : Double, parityQubit : Qubit, qubits : Qubit[]) : Unit {
-        
-        body (...) {
+    operation JWOptimizedApplyTrotterStep (data : JWOptimizedHTerms, time : Double, trotterStepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    : Unit is Adj + Ctl {
             let generatorSystem = JWOptimizedGeneratorSystem(data);
             let evolutionGenerator = EvolutionGenerator(JordanWignerOptimizedFermionEvolutionSet(parityQubit), generatorSystem);
             let trotterOrder = 1;
             let simulationAlgorithm = TrotterSimulationAlgorithm(trotterStepSize, trotterOrder);
             simulationAlgorithm!(time, evolutionGenerator, qubits);
-        }
-        
-        adjoint invert;
-        controlled distribute;
-        controlled adjoint distribute;
     }
     
 }
