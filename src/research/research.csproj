@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.Net.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!--
     This package is a metapackage, in that it contains no code in and of itself,
