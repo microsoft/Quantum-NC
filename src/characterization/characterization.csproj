@@ -11,7 +11,7 @@
     <Description>Quantum research libraries for quantum characterization (non-commercial).</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
-    <PackageLicenseUrl>https://github.com/Microsoft/Quantum-NC/raw/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>../../LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/Microsoft/Quantum-NC</PackageProjectUrl>
     <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
