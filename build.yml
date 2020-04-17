@@ -15,14 +15,14 @@ jobs:
 - job: Windows
   pool: 'Hosted VS2017'
   steps:
-  - template: Build/steps.yml
+  - template: build/steps.yml
 - job: macOS
   pool: 'Hosted macOS'
   steps:
-  - template: Build/steps.yml
+  - template: build/steps.yml
 - job: Linux
   pool: 'Hosted Ubuntu 1604'
   steps:
-  - template: Build/steps.yml
+  - template: build/steps.yml
 
 

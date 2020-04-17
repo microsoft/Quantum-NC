@@ -2,10 +2,6 @@
 // Microsoft Software License Terms for Microsoft Quantum Development Kit Libraries
 // and Samples. See LICENSE in the project root for license information.
 
-// This applies some methods described in
-// Improving Quantum Algorithms for Quantum Chemistry
-// M. B. Hastings, D. Wecker, B. Bauer, M. Troyer
-// https://arxiv.org/abs/1403.1539
 namespace Microsoft.Quantum.Research.Chemistry {
     open Microsoft.Quantum.Simulation;
     open Microsoft.Quantum.Intrinsic;
@@ -14,6 +10,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     open Microsoft.Quantum.Chemistry;
     open Microsoft.Quantum.Chemistry.JordanWigner;
     open Microsoft.Quantum.Arrays;
+    open Microsoft.Quantum.Logical;
 
 
     // This evolution set runs off data optimized for a jordan-wigner encoding.
@@ -52,7 +49,6 @@ namespace Microsoft.Quantum.Research.Chemistry {
         let (minInt, bitStringApplyCNOT) = _DeltaParityCNOTbitstring(prevFermionicTerm, nextFermionicTerm);
 
         for (idx in 0 .. Length(bitStringApplyCNOT) - 1) {
-
             if (bitStringApplyCNOT[idx] == true) {
                 CNOT(qubits[idx + minInt], aux);
             }
@@ -93,7 +89,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
         }
 
         for (idx in 0 .. nInts - 1) {
-            set nextBitString w/= idx <- XOR(prevBitString[idx], nextBitString[idx]);
+            set nextBitString w/= idx <- Xor(prevBitString[idx], nextBitString[idx]);
         }
 
         return (minInt, nextBitString);
@@ -107,7 +103,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// # Input
     /// ## qubit
     /// Qubit whose basis is to be changed.
-    operation _Ybasis(qubit : Qubit) : Unit is Adj + Ctl {
+    internal operation TransformZToY(qubit : Qubit) : Unit is Adj + Ctl {
         Adjoint S(qubit);
         H(qubit);
     }
@@ -120,12 +116,12 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// # Input
     /// ## qubit
     /// Qubit whose basis is to be changed.
-    operation _Xbasis(qubit : Qubit) : Unit is Adj + Ctl {
+    internal operation TransformZToX(qubit : Qubit) : Unit is Adj + Ctl {
         H(qubit);
     }
 
 
-    operation _ApplyBasisChange(
+    internal operation ApplyBasisChange(
         ops : (Qubit => Unit is Adj + Ctl)[],
         qubits : Qubit[],
         targetQubit : Qubit
@@ -226,18 +222,15 @@ namespace Microsoft.Quantum.Research.Chemistry {
         let qubitP = qubits[idxFermions[0]];
         let qubitQ = qubits[idxFermions[1]];
         let qubitsPQ = Subarray(idxFermions[0 .. 1], qubits);
-        let x = _Xbasis;
-        let y = _Ybasis;
-        let ops = [[_Xbasis, _Xbasis], [_Ybasis, _Ybasis]];
-        let op0 = _JWOptimizedZ(angle, parityQubit, _);
-        let op1 = ApplyWithCA(CNOTChainTarget([qubitP], _), op0, _);
+        let ops = [TransformZToX, TransformZToY];
 
-        for (idxOp in 0 .. Length(ops) - 1) {
-            ApplyWithCA(
-                _ApplyBasisChange(ops[idxOp], [qubitP], _),
-                op1,
-                qubitQ
-            );
+        for (op in ops) {
+            within {
+                ApplyBasisChange([op, op], [qubitP], qubitQ);
+                ApplyCNOTChainWithTarget([qubitP], qubitQ);
+            } apply {
+                _JWOptimizedZ(angle, parityQubit, qubitQ);
+            }
         }
     }
 
@@ -305,8 +298,8 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Implementation step of `JWOptimized0123Term_`;
     operation _JWOptimized0123Term__ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
     : Unit is Adj + Ctl {
-        let x = _Xbasis;
-        let y = _Ybasis;
+        let x = TransformZToX;
+        let y = TransformZToY;
         let angle = stepSize;
 
         // v0 v1 v2 v3 v0 v1 v2 v3
@@ -328,8 +321,8 @@ namespace Microsoft.Quantum.Research.Chemistry {
         for (idxOp in 0 .. 7) {
             if (IsNotZero(v0123[idxOp % 4])) {
                 let op0 = _JWOptimizedZ(angle * v0123[idxOp % 4], parityQubit, _);
-                let op1 = ApplyWithCA(CNOTChainTarget(qubitsPQR, _), op0, _);
-                let op2 = ApplyWithCA(_ApplyBasisChange(ops[idxOp], qubitsPQR, _), op1, _);
+                let op1 = ApplyWithCA(ApplyCNOTChainWithTarget(qubitsPQR, _), op0, _);
+                let op2 = ApplyWithCA(ApplyBasisChange(ops[idxOp], qubitsPQR, _), op1, _);
                 op2(qubitS);
             }
         }
