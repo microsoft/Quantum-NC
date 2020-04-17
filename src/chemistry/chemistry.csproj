@@ -11,7 +11,6 @@
     <Description>Quantum research libraries for quantum chemistry (non-commercial).</Description>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
-    <PackageLicenseFile>$(MSBuildProjectDirectory)/../../LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/Microsoft/Quantum-NC</PackageProjectUrl>
     <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
@@ -20,4 +19,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Quantum.Chemistry" Version="0.11.2003.3107" />
   </ItemGroup>
+
+  <Import Project="../../build/common/license.props" />
+
 </Project>
