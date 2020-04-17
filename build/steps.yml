@@ -9,18 +9,18 @@ steps:
 
 - powershell: ./build.ps1
   displayName: "Building"
-  workingDirectory: $(System.DefaultWorkingDirectory)/Build
+  workingDirectory: $(System.DefaultWorkingDirectory)/build
 
 
 - powershell: ./test.ps1
   displayName: "Testing"
-  workingDirectory: $(System.DefaultWorkingDirectory)/Build
+  workingDirectory: $(System.DefaultWorkingDirectory)/build
   condition: and(succeeded(), ne(variables['Skip.Tests'], 'true'))
 
 
 - powershell: ./pack.ps1
   displayName: "Packing"
-  workingDirectory: $(System.DefaultWorkingDirectory)/Build
+  workingDirectory: $(System.DefaultWorkingDirectory)/build
 
 
 - template: step-wrap-up.yml
