@@ -12,7 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\research\research.csproj" />
+    <ProjectReference Include="..\..\characterization\characterization.csproj" />
+    <ProjectReference Include="..\..\chemistry\chemistry.csproj" />
   </ItemGroup>
 
   <ItemGroup>

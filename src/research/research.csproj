@@ -23,11 +23,13 @@
     <PackageProjectUrl>https://github.com/Microsoft/Quantum-NC</PackageProjectUrl>
     <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="../chemistry/chemistry.csproj" />
     <ProjectReference Include="../characterization/characterization.csproj" />
+    <ProjectReference Include="../simulation/qsp/QuantumSignalProcessing.fsproj" />
   </ItemGroup>
 
   <Import Project="../../build/common/license.props" />
