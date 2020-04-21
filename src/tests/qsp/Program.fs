@@ -16,6 +16,7 @@ open Microsoft.Quantum.Research.QuantumSignalProcessing.MPFFT
 open Microsoft.Quantum.Research.QuantumSignalProcessing.MPPolynomials
 open Microsoft.Quantum.Research.QuantumSignalProcessing.QSPPrimitives
 open Microsoft.Quantum.Research.QuantumSignalProcessing.QSP
+open System.Runtime.InteropServices
 
 type BigFloat = MPNumber.BigFloat
 
@@ -214,6 +215,12 @@ let OneOverSineTest() =
     OneOverSine 1.0e-10 5.0 |> ignore
     printfn "Done"
 
+type SkipOnNonWindowsFactAttribute() as this =
+    inherit FactAttribute()
+    do
+        if not (RuntimeInformation.IsOSPlatform OSPlatform.Windows) then
+            this.Skip <- "Test only supported on Windows."
+
 type QSPTests() =
 
     [<Fact>]
@@ -243,7 +250,7 @@ type QSPTests() =
         // Therefore, the following line must be true.
         zeros.Length = 0
 
-    [<Fact>]
+    [<SkipOnNonWindowsFact>]
     member __.RootFindingUsingMKLTest() =
         Control.UseNativeMKL()
         Assert.True( __.SampleRootFinder() )
