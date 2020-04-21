@@ -11,6 +11,7 @@
     );
     Assemblies = @(
         ".\src\characterization\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Characterization.dll",
-        ".\src\chemistry\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Chemistry.dll"
+        ".\src\chemistry\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Chemistry.dll",
+        ".\src\simulation\qsp\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Simulation.Qsp.dll"
     ) | ForEach-Object { Get-Item (Join-Path $PSScriptRoot ".." $_) };
 } | Write-Output;

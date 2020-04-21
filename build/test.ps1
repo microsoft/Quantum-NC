@@ -19,8 +19,8 @@ function Test-One {
     $script:all_ok = ($LastExitCode -eq 0) -and $script:all_ok
 }
 
-Write-Host "##[info]Testing Quantum-NC/src/tests"
-Test-One '../src/tests'
+Write-Host "##[info]Testing Quantum-NC.sln"
+Test-One '../Quantum-NC.sln'
 
 
 if (-not $all_ok) {

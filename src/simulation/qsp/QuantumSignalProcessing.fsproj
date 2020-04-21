@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Microsoft.Quantum.Research.Simulation.Qsp</AssemblyName>
+  </PropertyGroup>
+
+  <!--
+      NB: In the future, we may have additional assemblies in the
+          Microsoft.Quantum.Research.Simulation package, but for now, we'll
+          build that package from the QSP project directly.
+  -->
+  <PropertyGroup>
+    <Authors>Microsoft</Authors>
+    <Description>Quantum research libraries for quantum simulation (non-commercial).</Description>
+    <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageId>Microsoft.Quantum.Research.Simulation</PackageId>
+    <PackageReleaseNotes>See: https://docs.microsoft.com/en-us/quantum/relnotes/</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/Microsoft/Quantum-NC</PackageProjectUrl>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
+    <PackageTags>Quantum Q# Qsharp</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="MPNumber.fs" />
+    <Compile Include="MPFFT.fs" />
+    <Compile Include="MPPolynomials.fs" />
+    <Compile Include="QSPPrimitives.fs" />
+    <Compile Include="QSP.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="4.8.1" />
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
+    <PackageReference Include="MathNet.Numerics.MKL.Win-x64" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.0" />
+  </ItemGroup>
+
+</Project>
