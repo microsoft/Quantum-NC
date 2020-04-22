@@ -29,7 +29,9 @@
     <Compile Include="MPPolynomials.fs" />
     <Compile Include="QSPPrimitives.fs" />
     <Compile Include="QSP.fs" />
-    <Compile Include="Properties/DelaySign.fs" />
+    <Compile Include="Properties/DelaySign.fs">
+      <Link>DelaySign.fs</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
