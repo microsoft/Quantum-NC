@@ -20,6 +20,7 @@
     <PackageIconUrl>https://secure.gravatar.com/avatar/bd1f02955b2853ba0a3b1cdc2434e8ec.png</PackageIconUrl>
     <PackageTags>Quantum Q# Qsharp</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,6 +41,8 @@
     <PackageReference Update="FSharp.Core" Version="4.7.0" />
   </ItemGroup>
 
-  <Import Project="../../../build/common/license.props" />
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../../../LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>

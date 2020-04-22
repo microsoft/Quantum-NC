@@ -13,6 +13,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Research</AssemblyName>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -32,6 +33,8 @@
     <ProjectReference Include="../simulation/qsp/QuantumSignalProcessing.fsproj" />
   </ItemGroup>
 
-  <Import Project="../../build/common/license.props" />
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../../LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>
