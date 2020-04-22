@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Research.Characterization</AssemblyName>
-    <QsharpDocsGeneration>true</QsharpDocsGeneration>  
+    <QsharpDocsGeneration>true</QsharpDocsGeneration>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,6 +18,8 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
-  <Import Project="../../build/common/license.props" />
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../../LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>

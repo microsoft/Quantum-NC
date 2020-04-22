@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Research.Chemistry</AssemblyName>
     <QsharpDocsGeneration>true</QsharpDocsGeneration>  
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -21,6 +22,8 @@
     <PackageReference Include="Microsoft.Quantum.Chemistry" Version="0.11.2003.3107" />
   </ItemGroup>
 
-  <Import Project="../../build/common/license.props" />
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)../../LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
 </Project>
