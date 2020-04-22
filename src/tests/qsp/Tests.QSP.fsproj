@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Properties/DelaySign.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
