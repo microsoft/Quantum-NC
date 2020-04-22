@@ -5,9 +5,17 @@
   <PropertyGroup>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="../../LICENSE" Pack="true" PackagePath=""/>
-  </ItemGroup>
+
+  <Target Name="IncludeLicense" BeforeTargets="PrepareForBuild">
+    <!--
+      NB: MSBuildThisFile is with respect to the currently running target,
+          so we use a new target to force that variable to resolve to the
+          location of these build props and not the importing project.
+    -->
+    <ItemGroup>
+      <None Include="$(MSBuildThisFileDirectory)../../LICENSE" Pack="true" PackagePath=""/>
+    </ItemGroup>
+  </Target>
 
 
 </Project>

@@ -40,6 +40,6 @@
     <PackageReference Update="FSharp.Core" Version="4.7.0" />
   </ItemGroup>
 
-  <Import Project="../../build/common/license.props" />
+  <Import Project="../../../build/common/license.props" />
 
 </Project>
