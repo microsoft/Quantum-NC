@@ -23,6 +23,7 @@ Write-Host "##[info]Packing Research libraries..."
 @(
     '../src/chemistry/chemistry.csproj',
     '../src/characterization/characterization.csproj',
+    '../src/simulation/qsp/QuantumSignalProcessing.fsproj'
     '../src/research/research.csproj'
 ) | ForEach-Object { Pack-One $_ }
 
