@@ -3,6 +3,7 @@
 Welcome to the Microsoft Quantum Development Kit!
 
 This repository contains shared-source libraries that can be used for research and academics, but that cannot be used for commercial purposes.
+Please note that these libraries are not intended for production use, and may be modified as research proceeds.
 For more information please refer to the [LICENSE](LICENSE).
 
 ## Using the non-commercial research libraries
