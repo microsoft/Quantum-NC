@@ -207,13 +207,13 @@ namespace Microsoft.Quantum.Research.Chemistry {
     operation _JWOptimizedHpqTerm(term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
     : Unit is Adj + Ctl {
         let ((idxTermType, coeff), idxFermions) = term!;
-        ApplyWithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimizedHpqTerm__(term, stepSize, parityQubit, _), qubits);
+        ApplyWithCA(ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _), _JWOptimizedHpqTermImpl(term, stepSize, parityQubit, _), qubits);
     }
 
 
     /// # Summary
     /// Implementation step of `JWOptimizedHpqTerm_`.
-    operation _JWOptimizedHpqTerm__ (
+    operation _JWOptimizedHpqTermImpl (
         term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[]
     )
     : Unit is Adj + Ctl {
@@ -288,7 +288,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
         let ((idxTermType, coeff), idxFermions) = term!;
         ApplyWithCA(
             ApplyDeltaParity(new Int[0], idxFermions, parityQubit, _),
-            _JWOptimized0123Term__(term, stepSize, parityQubit, _),
+            _JWOptimized0123TermImpl(term, stepSize, parityQubit, _),
             qubits
         );
     }
@@ -296,7 +296,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
 
     /// # Summary
     /// Implementation step of `JWOptimized0123Term_`;
-    operation _JWOptimized0123Term__ (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
+    operation _JWOptimized0123TermImpl (term : GeneratorIndex, stepSize : Double, parityQubit : Qubit, qubits : Qubit[])
     : Unit is Adj + Ctl {
         let x = TransformZToX;
         let y = TransformZToY;
