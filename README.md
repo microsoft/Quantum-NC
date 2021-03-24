@@ -15,10 +15,10 @@ For more details, please see:
 ## Feedback
 
 If you have feedback about the libraries in this repository, please let us know by filing a [new issue](https://github.com/microsoft/Quantum-NC/issues/new)!
-If you have feedback about some other part of the Microsoft Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/quantum/contributing/) for more information on the best places to file it.
+If you have feedback about some other part of the Microsoft Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/azure/quantum/contributing-overview) for more information on the best places to file it.
 
 ## Contributing
 
 Please note: **this project does not accept external contributions**.
 
-If you'd like to contribute to the rest of the Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/quantum/contributing/).
+If you'd like to contribute to the rest of the Quantum Development Kit, please see the [contribution guide](https://docs.microsoft.com/azure/quantum/contributing-overview).
