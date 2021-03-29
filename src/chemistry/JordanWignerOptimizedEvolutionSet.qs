@@ -367,7 +367,7 @@ namespace Microsoft.Quantum.Research.Chemistry {
     /// Represents a dynamical generator as a set of simulatable gates and an
     /// expansion in the JWOptimized basis.
     ///
-    /// See [Dynamical Generator Modeling](../libraries/data-structures#dynamical-generator-modeling)
+    /// See [Dynamical Generator Modeling](xref:microsoft.quantum.libraries.overview.data-structures#dynamical-generator-modeling)
     /// for more details.
     ///
     /// # Input
