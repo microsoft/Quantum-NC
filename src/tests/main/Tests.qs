@@ -23,7 +23,7 @@ namespace Microsoft.Quantum.Research.Tests {
 
         repeat {
             mutable actual = 0.0;
-            using (eigenstate = Qubit()) {
+            use eigenstate = Qubit() {
                 X(eigenstate);
                 set actual = RandomWalkPhaseEstimation(0.0, 1.0, 61, 100000, 0, oracle, [eigenstate]);
                 Reset(eigenstate);
@@ -34,7 +34,8 @@ namespace Microsoft.Quantum.Research.Tests {
             } else {
                 return ();
             }
-        } until (nAttemptsSoFar >= nAttemptsAllowed);
+        }
+        until nAttemptsSoFar >= nAttemptsAllowed;
 
         fail $"CheckBayesianPERandomWalk failed {nAttemptsSoFar} times in a row.";
     }

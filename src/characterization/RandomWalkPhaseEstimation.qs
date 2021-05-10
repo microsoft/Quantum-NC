@@ -10,20 +10,18 @@ namespace Microsoft.Quantum.Research.Characterization {
     open Microsoft.Quantum.Oracles;
     open Microsoft.Quantum.Characterization;
 
-    operation _PrepAndMeasurePhaseEst(
+    internal operation _PrepAndMeasurePhaseEst(
         wInv : Double,
         t : Double,
         op : ((Double, Double, Qubit) => Unit))
     : Result {
-        using (target = Qubit()) {
-            op(t, wInv, target);
-            return MResetZ(target);
-        }
+        use target = Qubit();
+        op(t, wInv, target);
+        return MResetZ(target);
     }
-    
-    
+
     // NB: we take std.dev instead of variance here to avoid having to take a square root.
-    
+
     /// # Summary
     /// Performs iterative phase estimation using a random walk to approximate
     /// Bayesian inference on the classical measurement results from a given
@@ -109,79 +107,39 @@ namespace Microsoft.Quantum.Research.Characterization {
         mutable datum = Zero;
         mutable nTotalMeasurements = 0;
         mutable nAcceptedMeasurements = 0;
-        
+
         repeat {
-            
-            if (nTotalMeasurements >= maxMeasurements) {
+
+            if nTotalMeasurements >= maxMeasurements {
                 return mu;
             }
-            
+
             let wInv = mu - (PI() * sigma) / 2.0;
             let t = 1.0 / sigma;
             set datum = sampleOp(wInv, t);
             set nTotalMeasurements += 1;
-            
-            if (datum == Zero) {
+
+            if datum == Zero {
                 set mu -= sigma * INV_SQRT_E;
             } else {
                 set mu += sigma * INV_SQRT_E;
             }
-            
+
             set sigma *= PREFACTOR;
             set dataRecord += [datum];
-            
+
             // Perform consistency check.
             if (nTotalMeasurements >= maxMeasurements) {
                 return mu;
             }
-            
-            if (unwind > 0) {
-                mutable checkDatum = sampleOp(mu, 1.0 / sigma);
-                set nTotalMeasurements = nTotalMeasurements + 1;
-                
-                if (checkDatum == One) {
-                    
-                    repeat {
-                        
-                        for (idxUnwind in 0 .. unwind - 1) {
-                            set sigma /= PREFACTOR;
-                            
-                            if (Length(dataRecord) > 0) {
-                                let unwoundDatum = Tail(dataRecord);
-                                set dataRecord = Most(dataRecord);
-                                
-                                if (unwoundDatum == Zero) {
-                                    set mu += sigma * INV_SQRT_E;
-                                }
-                                else {
-                                    set mu -= sigma * INV_SQRT_E;
-                                }
-                            }
-                        }
-                        
-                        if (nTotalMeasurements >= maxMeasurements) {
-                            Message("RWPE used too many measurements during unwinding.");
-                            return mu;
-                        }
-                        
-                        set checkDatum = sampleOp(mu, 1.0 / sigma);
-                        set nTotalMeasurements += 1;
-                    }
-                    until (checkDatum == Zero)
-                    fixup {
-                    }
-                }
-            }
-            
+
             set nAcceptedMeasurements = nAcceptedMeasurements + 1;
         }
-        until (nAcceptedMeasurements >= nMeasurements)
-        fixup {
-        }
-        
+        until nAcceptedMeasurements >= nMeasurements;
+
         return mu;
     }
-    
+
 }
 
 
