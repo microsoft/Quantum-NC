@@ -9,7 +9,9 @@ $all_ok = $True
 function Test-One {
     Param($project)
 
-    dotnet test (Join-Path $PSScriptRoot $project) `
+    $TestsLogs = Join-Path $Env:LOGS_OUTDIR log-tests-quantum-nc.txt
+
+    dotnet test (Join-Path $PSScriptRoot $project) --diag:"$TestsLogs" `
         -c $Env:BUILD_CONFIGURATION `
         -v $Env:BUILD_VERBOSITY `
         --logger trx `
