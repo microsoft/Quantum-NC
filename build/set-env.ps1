@@ -19,3 +19,6 @@ If (-not (Test-Path -Path $Env:NUGET_OUTDIR)) { [IO.Directory]::CreateDirectory(
 If ($Env:DOCS_OUTDIR -eq $null) { $Env:DOCS_OUTDIR =  (Join-Path $Env:DROPS_DIR "docs") }
 If (-not (Test-Path -Path $Env:DOCS_OUTDIR)) { [IO.Directory]::CreateDirectory($Env:DOCS_OUTDIR) }
 
+If ($Env:LOGS_OUTDIR -eq $null) { $Env:LOGS_OUTDIR =  (Join-Path $Env:DROPS_DIR "logs") }
+If (-not (Test-Path -Path $Env:LOGS_OUTDIR)) { [IO.Directory]::CreateDirectory($Env:LOGS_OUTDIR) }
+
