@@ -61,7 +61,7 @@ namespace Microsoft.Quantum.Research.Characterization {
     ///
     /// Then, performing iterative phase estimation will eventually converge
     /// to a single eigenstate, as described in the
-    /// [development guide](xref:microsoft.quantum.libraries.characterization#iterative-phase-estimation-without-eigenstates).
+    /// [development guide](xref:microsoft.quantum.libraries.overview.characterization#iterative-phase-estimation-without-eigenstates).
     ///
     /// ### Experiment Design
     /// The measurement times $t$ and inversion angles $\theta$
@@ -78,7 +78,7 @@ namespace Microsoft.Quantum.Research.Characterization {
     /// $\phi$, as evaluated using the
     /// quadratic loss $L(\phi, \hat{\phi}) \mathrel{:=} (\phi - \hat{\phi})^2$.
     ///
-    /// See [Bayesian Phase Estimation](xref:microsoft.quantum.libraries.characterization#bayesian-phase-estimation)
+    /// See [Bayesian Phase Estimation](xref:microsoft.quantum.libraries.overview.characterization#bayesian-phase-estimation)
     /// for more details on the statistics of iterative phase estimation.
     ///
     /// # References
