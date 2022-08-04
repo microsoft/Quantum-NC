@@ -1,0 +1,9 @@
+adlfs==2022.2.0
+dask[distributed]==2022.2.0
+holoviews==1.15.0
+jenkspy==0.2.0
+netCDF4==1.6.0
+nptyping==2.2.0
+typeguard==2.13.3
+urlpath==1.2.0
+xarray==0.20.2

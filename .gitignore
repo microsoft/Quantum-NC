@@ -8,6 +8,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.[v]env/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -23,6 +24,8 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+__pycache__/
+dist/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -286,4 +289,10 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Other build artifacts
+drops/
+*.egg-info/
 build/267DevDivSNKey2048.snk
+src/topogap-protocol/build/
+src/topogap-protocol/topogap_protocol/version.py
