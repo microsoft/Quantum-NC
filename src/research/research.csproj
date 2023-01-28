@@ -10,7 +10,7 @@
   -->
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Microsoft.Quantum.Research</AssemblyName>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
