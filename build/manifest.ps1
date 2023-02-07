@@ -25,9 +25,9 @@ $artifacts = @{
     ) | ForEach-Object { Join-Path $Env:NUGET_OUTDIR "$_.$Env:NUGET_VERSION.nupkg" };
 
     Assemblies = @(
-        ".\src\characterization\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Characterization.dll",
-        ".\src\chemistry\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Chemistry.dll",
-        ".\src\simulation\qsp\bin\$Env:BUILD_CONFIGURATION\netstandard2.1\Microsoft.Quantum.Research.Simulation.Qsp.dll"
+        ".\src\characterization\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Research.Characterization.dll",
+        ".\src\chemistry\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Research.Chemistry.dll",
+        ".\src\simulation\qsp\bin\$Env:BUILD_CONFIGURATION\net6.0\Microsoft.Quantum.Research.Simulation.Qsp.dll"
     ) | ForEach-Object { Join-Path $PSScriptRoot (Join-Path ".." $_) };
 }
 
