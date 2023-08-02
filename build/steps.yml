@@ -7,6 +7,10 @@ steps:
     version: '6.0.x'
 
 
+- task: NuGetAuthenticate@1
+  inputs:
+    nuGetServiceConnections: 'public-alpha feed'
+
 - powershell: ./build.ps1
   displayName: "Building"
   workingDirectory: $(System.DefaultWorkingDirectory)/build
