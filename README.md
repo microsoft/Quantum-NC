@@ -1,6 +1,14 @@
-# Microsoft Quantum Development Kit: Non-Commercial Libraries
+## DEPRECATION NOTICE
 
-Welcome to the Microsoft Quantum Development Kit!
+**This repository is deprecated.** 
+
+For the Modern QDK repository, please visit [Microsoft/qsharp](http://github.com/microsoft/qsharp).
+
+You can also try out the Modern QDK in VS Code for Web at [vscode.dev/quantum](http://vscode.dev/quantum).
+
+For more information about the Modern QDK and Azure Quantum, visit https://aka.ms/AQ/Documentation
+
+## Classic QDK ##
 
 This repository contains shared-source libraries that can be used for research and academics, but that cannot be used for commercial purposes.
 Please note that these libraries are not intended for production use, and may be modified as research proceeds.
